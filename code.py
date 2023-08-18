@@ -151,7 +151,7 @@ while True:
 	
 
 	#led[0] = rainbowio.colorwheel( int( 10 * position ) % 255  )	# LEDをエンコーダ値で虹色に変更
-	led[0] = rainbowio.colorwheel( int( 50 * time.monotonic() ) % 255  )	# LEDをエンコーダ値で虹色に変更
+	led[0] = rainbowio.colorwheel( int( 50 * time.monotonic() ) % 255  )	# LEDを虹色に変更
 	led.show()  # LEDの値を変更後更新
 
 	position_last = position 
