@@ -3,6 +3,7 @@
 K40 Whispererのショートカット
 	https://www.scorchworks.com/K40whisperer/k40w_manual.html#keyboard
 
+［入力］
 ボタン
  [X]	ヘッドの移動方向をＸ軸にする（右：＋）
  [Y]	　　　〃　　　　　Ｙ軸　〃
@@ -12,11 +13,10 @@ K40 Whispererのショートカット
 
 ロータリーエンコーダ
 　＋(時計回)　ヘッドの移動方向を軸に対して＋方向に移動
-　－(反時計)　ヘッドの　　　　〃　　　　　－方向　〃
+　－(反時計)　ヘッドの　　　　〃　　　　　ー方向　〃
 
 
 """
-
 
 import board		# 基板関係(アサインとか)
 import rotaryio		# ロータリーエンコーダ
@@ -24,10 +24,11 @@ import usb_hid		# HID
 import digitalio	# GPIO
 import neopixel		# LEDテープ
 import rainbowio	# LEDテープを虹
-import time 
-from adafruit_debouncer    import Debouncer
+import time
+import keypad
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keyboard import Keycode
+
 
 
 ### 初期設定 ############################################################
@@ -37,89 +38,78 @@ kbd = Keyboard( usb_hid.devices )
 
 
 # 複数の端子をリスト化してデバウンス
-#	       0           1           2          3          4           5           6          7          8
-#	       [X]     SW, [X]    LED, [Y]    SW, [Y]   LED, [x1]    SW, [x1]   LED, [x5]   SW, [x5]  LED, [HOME] SW
-myPins = ( board.GP25, board.GP26, board.GP3, board.GP4, board.GP27, board.GP28, board.GP1, board.GP2, board.GP0 )
-myBtns = []
-for ii, pin in enumerate( myPins ) :		# enumerate(添字)込みの繰り返し
-	tmp_pin = digitalio.DigitalInOut( pin )	# 端子の指定
-	
-	#偶数：ボタン(入力)
-	if ii % 2 == 0 :
-		tmp_pin.pull = digitalio.Pull.UP 		# 内部のプルアップ抵抗を有効化
-		myBtns.append( Debouncer( tmp_pin ) )	# スイッチ　※Debouncer()必須
+#	          0           1          2           3          4
+#             [X]         [Y]        [x1]        [x5]       [HOME]
+myPinsIN  = ( board.GP25, board.GP3, board.GP27, board.GP1, board.GP0 )	# SW
+myPinsOUT = ( board.GP26, board.GP4, board.GP28, board.GP2 )			# LED
+myBTNs = []
+myLEDs = []
+myBtns = keypad.Keys( myPinsIN, value_when_pressed=False, pull=True )	# ボタンの設定
 
-	#奇数：ＬＥＤ(出力)
-	elif ii % 2 == 1 :
-		tmp_pin.direction = digitalio.Direction.OUTPUT	# 出力
-		myBtns.append( tmp_pin )						# LED　※Debouncer不要
-	
-	else :
-		pass	
-	
+for ii, pin in enumerate( myPinsOUT ) :		# enumerate(添字)込みの繰り返し
+	tmp_pin = digitalio.DigitalInOut( pin )	# 端子の指定	
+	tmp_pin.direction = digitalio.Direction.OUTPUT	# 出力
+	myLEDs.append( tmp_pin )						# LED　※Debouncer不要
+
 
 # エンコーダ
 encoder = rotaryio.IncrementalEncoder( board.GP15, board.GP14 )	# エンコーダの設定
-position_last = None							# 初期値
+position_last = None											# 初期値
 tmp_pin = digitalio.DigitalInOut( board.GP16 )	# LED用の端子の指定
 tmp_pin.direction = digitalio.Direction.OUTPUT	# 　 〃　端子を出力
 tmp_pin.value = True							#  　　　端子をHigh
 
 
-# Neopixel（フルカラーLED）
+# Neopixelの制御
 num_leds = 1	# LEDの数
-led = neopixel.NeoPixel( board.GP13, num_leds, brightness=0.1 )
+led = neopixel.NeoPixel( board.GP13, num_leds, brightness=0.2 )
 
 
 # ボタン状態の変数
 XY = 0	# 0:X,  1:Y
 xx = 0	# 0:x1, 1:x5
-myBtns[1].value = True	# [X] 点灯
-myBtns[5].value = True	# [x1]点灯
+myLEDs[0].value = True	# [X] 点灯
+myLEDs[2].value = True	# [x1]点灯
 
 
 
 ### ループ ############################################################
 while True:
 	
-	# SWの取得
-	for ii in range( 0, len( myBtns ), 2 ):	# 2ずつ増やす
-		myBtns[ii].update()	#値の更新
-		
-		# ボタンが押されたときのイベント	
-		if myBtns[ii].fell :
-			myBtns[ii+1].value = True	# LED点灯	※消灯は条件ごと！
+	myBtn = myBtns.events.get()
+	if myBtn :
+		if myBtn.presed :
+			# [X]
+			if  myBtn.key_number == 0 :
+				XY == 0
+				myLEDs[0].value = True	# X LED点灯
+				myLEDs[1].value = False	# Y LED消灯
 
-			# [X] が押された
-			if ii == 0 :
-				XY = 0
-				myBtns[3].value = False	# Y LED消灯
+			# [Y]
+			elif  myBtn.key_number == 1 :
+				XY == 1
+				myLEDs[0].value = False	# X LED消灯
+				myLEDs[1].value = True	# Y LED点灯
 
-			# [Y] が押された
-			elif ii == 2 :
-				XY = 1
-				myBtns[1].value = False	# X LED消灯
-
-			# [x1] が押された
-			elif   ii == 4 :
-				xx = 0
-				myBtns[7].value = False			# x5 LED消灯
+			# [x1]
+			elif  myBtn.key_number == 2 :
+				xx == 0
+				myBtns[2].value = True			# x1 LED点灯
+				myBtns[3].value = False			# x5 LED消灯
 				kbd.send( Keycode.BACKSPACE )	# 文字を消して"1"を入力
-				kbd.send( Keycode.ONE )			# 	※一文字を前提としている！	
+				kbd.send( Keycode.ONE )			# 	※一文字を前提としている！
 
-			# [x5] が押された
-			elif ii == 6 :
-				xx = 1
-				myBtns[5].value = False			# x1 LED消灯
+			# [x5]
+			elif  myBtn.key_number == 3 :
+				xx == 0
+				myBtns[2].value = False			# x1 LED消灯
+				myBtns[3].value = True			# x5 LED点灯
 				kbd.send( Keycode.BACKSPACE )	# 文字を消して”5”を入力
 				kbd.send( Keycode.FIVE )		# 	※一文字を前提としている！
 
-			# [home] が押された
-			elif ii == 8 :
+			# [home]
+			elif ii == 4 :
 				kbd.send( Keycode.LEFT_CONTROL, Keycode.H )	# Ctl + H
-
-			else :
-				pass
 
 
 	# ロータリーエンコーダーによる挙動
@@ -149,7 +139,7 @@ while True:
 	
 
 	#led[0] = rainbowio.colorwheel( int( 10 * position ) % 255  )	# LEDをエンコーダ値で虹色に変更
-	led[0] = rainbowio.colorwheel( int( 50 * time.monotonic() ) % 255  )	# LEDを虹色に変更
+	led[0] = rainbowio.colorwheel( int( 50 * time.monotonic() ) % 255  )	# LEDをエンコーダ値で虹色に変更
 	led.show()  # LEDの値を変更後更新
 
 	position_last = position 
