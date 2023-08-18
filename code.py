@@ -3,7 +3,6 @@
 K40 Whispererのショートカット
 	https://www.scorchworks.com/K40whisperer/k40w_manual.html#keyboard
 
-［入力］
 ボタン
  [X]	ヘッドの移動方向をＸ軸にする（右：＋）
  [Y]	　　　〃　　　　　Ｙ軸　〃
@@ -13,7 +12,7 @@ K40 Whispererのショートカット
 
 ロータリーエンコーダ
 　＋(時計回)　ヘッドの移動方向を軸に対して＋方向に移動
-　－(反時計)　ヘッドの　　　　〃　　　　　ー方向　〃
+　－(反時計)　ヘッドの　　　　〃　　　　　－方向　〃
 
 
 """
@@ -29,7 +28,6 @@ import time
 from adafruit_debouncer    import Debouncer
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keyboard import Keycode
-
 
 
 ### 初期設定 ############################################################
@@ -68,7 +66,7 @@ tmp_pin.direction = digitalio.Direction.OUTPUT	# 　 〃　端子を出力
 tmp_pin.value = True							#  　　　端子をHigh
 
 
-# Neopixelの制御
+# Neopixel（フルカラーLED）
 num_leds = 1	# LEDの数
 led = neopixel.NeoPixel( board.GP13, num_leds, brightness=0.1 )
 
