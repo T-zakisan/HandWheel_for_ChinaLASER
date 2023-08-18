@@ -46,7 +46,7 @@
 | [RP2040マイコンボードキット](https://akizukidenshi.com/catalog/g/gK-17542/) | HIDが実装できいるマイコンであれば何でもよい |
 | [LED付ロータリーエンコーダー（青）ツマミ付セット](https://akizukidenshi.com/catalog/g/gP-05768/) ||
 | [ロータリーエンコーダDIP化基板　RECNV‐1](https://akizukidenshi.com/catalog/g/gP-07239/) ||
-| [LED照光式タクトスイッチ　青　キートップ付き](https://akizukidenshi.com/catalog/g/gP-13871/) | ボタンを押した際に状態のOn/OffをLEDの点灯状態で示す |
+| [LED照光式タクトスイッチ　青　キートップ付き](https://akizukidenshi.com/catalog/g/gP-13871/) | ５個，ボタンを押した際に状態のOn/OffをLEDの点灯状態で示す |
 | [ユニバーサル基板　Cタイプ(72×47mm)](https://akizukidenshi.com/catalog/g/gP-09747/) | ２枚重ねにして使用 |
 | [ピンヘッダ 1x40 (40P)](https://akizukidenshi.com/catalog/g/gC-00167/) | ユニバーサル基板を上下で接続 |
 | [分割ロングピンソケット 1x42 (42P)](https://akizukidenshi.com/catalog/g/gC-05779/) | 上記同様 |
@@ -72,5 +72,4 @@
 | AD0(26) | [X] \(LED+\) |
 | AD1(27) | [x5] \(SW+\) |
 | AD2(28) | [x5] \(LED+\) |
-
 
