@@ -60,7 +60,7 @@ for ii, pin in enumerate( myPins ) :		# enumerate(添字)込みの繰り返し
 
 # エンコーダ
 encoder = rotaryio.IncrementalEncoder( board.GP15, board.GP14 )	# エンコーダの設定
-position_last = None											# 初期値
+position_last = None							# 初期値
 tmp_pin = digitalio.DigitalInOut( board.GP16 )	# LED用の端子の指定
 tmp_pin.direction = digitalio.Direction.OUTPUT	# 　 〃　端子を出力
 tmp_pin.value = True							#  　　　端子をHigh
