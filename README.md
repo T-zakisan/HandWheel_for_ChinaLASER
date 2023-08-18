@@ -41,6 +41,36 @@
 
 # 作成方法
 ## パーツリスト
-| パーツ名 |
-|:----|
-| [RP2040マイコンボードキット](https://akizukidenshi.com/catalog/g/gK-17542/) |
+| パーツ名 | 備考 |
+|:----|:----|
+| [RP2040マイコンボードキット](https://akizukidenshi.com/catalog/g/gK-17542/) | HIDが実装できいるマイコンであれば何でもよい |
+| [LED付ロータリーエンコーダー（青）ツマミ付セット](https://akizukidenshi.com/catalog/g/gP-05768/) ||
+| [ロータリーエンコーダDIP化基板　RECNV‐1](https://akizukidenshi.com/catalog/g/gP-07239/) ||
+| [LED照光式タクトスイッチ　青　キートップ付き](https://akizukidenshi.com/catalog/g/gP-13871/) | ボタンを押した際に状態のOn/OffをLEDの点灯状態で示す |
+| [ユニバーサル基板　Cタイプ(72×47mm)](https://akizukidenshi.com/catalog/g/gP-09747/) | ２枚重ねにして使用 |
+| [ピンヘッダ 1x40 (40P)](https://akizukidenshi.com/catalog/g/gC-00167/) | ユニバーサル基板を上下で接続 |
+| [分割ロングピンソケット 1x42 (42P)](https://akizukidenshi.com/catalog/g/gC-05779/) | 上記同様 |
+| [カーボン抵抗（炭素皮膜抵抗） 1/6W1ｋΩ](https://akizukidenshi.com/catalog/g/gR-16102/) | ４個, SW付属のLED(電流調整)用 |
+
+
+## アサイン
+ここでは、マイコンが[RP2040マイコンボードキット](https://akizukidenshi.com/catalog/g/gK-17542/)の場合とする。  
+※各スイッチ(LED)は、電流調整用の抵抗(1kΩ)を接続のこと！
+| マイコン端子 | パーツ端子 |
+|:----:|:----|
+| 5V | ロータリーエンコーダ(+) |
+| GND | ロータリーエンコーダ(-), 各スイッチ(-), ロータリーエンコーダ(B) |
+| 0 | [home] \(SW+\) |
+| 1 | [x5] \(SW+\) |
+| 2 | [x5] \(LED+\) |
+| 3 | [Y] \(SW+\) |
+| 4 | [Y] \(LED+\) |
+| 14 | ロータリーエンコーダ(A) |
+| 15 | ロータリーエンコーダ(C) |
+| 16 | ロータリーエンコーダ(LED+) |
+| 25 | [X] \(SW+\) |
+| AD0(26) | [X] \(LED+\) |
+| AD1(27) | [x5] \(SW+\) |
+| AD2(28) | [x5] \(LED+\) |
+
+
