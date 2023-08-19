@@ -91,7 +91,11 @@
 1. 中華レーザーを起動
 2. **ハンドホイール** をＰＣに接続
 3. **K40 Whisperer** を起動
-4. **K40 Whisperer** の **Jog Step** にカーソルを合わせる　以上
+4. **K40 Whisperer** の **Jog Step [ ]mm** にカーソルを合わせる
+5. **[Initialize Laser Cutter]** を押して、初期化
+6. ハンドホイールを使用し、位置をコントロール
+
+以上
 
 
 
