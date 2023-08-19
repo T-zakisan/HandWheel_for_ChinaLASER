@@ -51,11 +51,13 @@
 | [ピンヘッダ 1x40 (40P)](https://akizukidenshi.com/catalog/g/gC-00167/) | ユニバーサル基板を上下で接続 |
 | [分割ロングピンソケット 1x42 (42P)](https://akizukidenshi.com/catalog/g/gC-05779/) | 上記同様 |
 | [カーボン抵抗（炭素皮膜抵抗） 1/6W1ｋΩ](https://akizukidenshi.com/catalog/g/gR-16102/) | ４個, SW付属のLED(電流調整)用 |
+| [SK6812使用マイコン内蔵フルカラーテープLED 1m 60LED IP20](https://akizukidenshi.com/catalog/g/gM-12982/) | LED３個使用|
 
 
 ## アサイン
 ここでは、マイコンが[RP2040マイコンボードキット](https://akizukidenshi.com/catalog/g/gK-17542/)の場合とする。  
 ※各スイッチ(LED)は、電流調整用の抵抗(1kΩ)を接続のこと！
+※ロータリーエンコーダ(LED+)とNえおPixcel(+5V)は、配線の取り回しの関係でGPIOから3.3Vを供給！
 | マイコン端子 | パーツ端子 |
 |:----:|:----|
 | GND | ロータリーエンコーダ(C,LED-), 各スイッチ(-), NeoPixcel(-) |
