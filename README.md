@@ -79,13 +79,19 @@
 
 
 ## 必須ライブラリ
-マイコン（メモリ容量）によって、[CircuitPythonのライブラリ](https://circuitpython.org/libraries)を保存することができない。   
-ここでは、最小構成のライブラリをリストアップしておく。
+マイコン種によっては、[CircuitPythonのライブラリ](https://circuitpython.org/libraries)の全てを保存することができない。   
+ここでは、使用する最低限のライブラリをリストアップしておく。  
 | ライブラリ名 | 備考 |
 |:----|:----:|
 | /adafruit_hid | ディレクトリごとコピー |
 | neopixel.mpy |  |
 
+
+# 使用方法
+1. 中華レーザーを起動
+2. **ハンドホイール** をＰＣに接続
+3. **K40 Whisperer** を起動
+4. **K40 Whisperer** の **Jog Step** にカーソルを合わせる　以上
 
 
 
