@@ -51,7 +51,7 @@
 | [ピンヘッダ 1x40 (40P)](https://akizukidenshi.com/catalog/g/gC-00167/) | ユニバーサル基板を上下で接続 |
 | [分割ロングピンソケット 1x42 (42P)](https://akizukidenshi.com/catalog/g/gC-05779/) | 上記同様 |
 | [カーボン抵抗（炭素皮膜抵抗） 1/6W1ｋΩ](https://akizukidenshi.com/catalog/g/gR-16102/) | ４個, SW付属のLED(電流調整)用 |
-| [SK6812使用マイコン内蔵フルカラーテープLED 1m 60LED IP20](https://akizukidenshi.com/catalog/g/gM-12982/) | LED３個使用|
+| [SK6812使用マイコン内蔵フルカラーテープLED 1m 60LED IP20](https://akizukidenshi.com/catalog/g/gM-12982/) | LED３個使用(以降NeoPixcel)|
 
 
 ## アサイン
