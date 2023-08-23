@@ -17,7 +17,6 @@ K40 Whispererのショートカット
 """
 
 import board, digitalio, usb_hid, time, keypad, rotaryio, neopixel,  rainbowio
-from adafruit_debouncer import Debouncer
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keyboard import Keycode
 
