@@ -52,6 +52,20 @@ encoder = rotaryio.IncrementalEncoder( board.GP15, board.GP14 )	# エンコー�
 position_last = None											# 初期値
 
 
+### 関数 ############################################################
+def myChange( num1, num2, Flag, chr ) :
+	global XY
+	myLEDs[num1].value = True
+	myLEDs[num2].value = False
+	if Flag==True :
+		for ii in range( 5 ) :
+			kbd.send( Keycode.BACKSPACE )	# 文字を消去
+			kbd.send( Keycode.DELETE )		# 文字を消去
+		kbd.send( chr )				# １を入力
+	elif Flag==False :
+		if   num1==2 : XY = True
+		elif num1==0 : XY = False
+
 
 ### ループ ############################################################
 while True:
@@ -61,38 +75,19 @@ while True:
 	if myBtn and myBtn.pressed :
 
 		# [X]が押された場合
-		if myBtn.key_number == 2 :
-			XY = True
-			myLEDs[2].value = True	# X LED点灯
-			myLEDs[0].value = False	# Y LED消灯
+		if   myBtn.key_number == 2 : myChange( num1=2, num2=0, Flag=False, chr="null" )
 
 		# [Y]が押された場合
-		elif myBtn.key_number == 0 :
-			XY = False
-			myLEDs[2].value = False	# X LED消灯
-			myLEDs[0].value = True	# Y LED点灯
+		elif myBtn.key_number == 0 : myChange( num1=0, num2=2, Flag=False, chr="null" )
 
 		# [x1]が押された場1
-		elif myBtn.key_number == 3 :
-			myLEDs[3].value = True	# x1 LED点灯
-			myLEDs[1].value = False	# x5 LED消灯
-			for ii in range( 5 ) :
-				kbd.send( Keycode.BACKSPACE )	# 文字を消去
-				kbd.send( Keycode.DELETE )		# 文字を消去
-			kbd.send( Keycode.ONE )				# １を入力
+		elif myBtn.key_number == 3 : myChange( num1=3, num2=1, Flag=True, chr=Keycode.ONE )
 
 		# [x5]が押された場合
-		elif myBtn.key_number == 1 :
-			myLEDs[3].value = False	# x1 LED消灯
-			myLEDs[1].value = True	# x5 LED点灯
-			for ii in range( 5 ) :
-				kbd.send( Keycode.BACKSPACE )	# 文字を消去
-				kbd.send( Keycode.DELETE )		# 文字を消去
-			kbd.send( Keycode.FIVE )			# ５を入力
+		elif myBtn.key_number == 1 : myChange( num1=1, num2=3, Flag=True, chr=Keycode.FIVE )
 
 		# [home]が押された場合
-		elif myBtn.key_number == 4 :
-			kbd.send( Keycode.LEFT_CONTROL, Keycode.H )	# Ctl + H
+		elif myBtn.key_number == 4 : kbd.send( Keycode.LEFT_CONTROL, Keycode.H )	# Ctl + H
 
 	# ロータリーエンコーダーを回したときのイベント
 	position = encoder.position	#値更新
