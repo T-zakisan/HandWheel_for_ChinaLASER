@@ -17,6 +17,7 @@ K40 Whispererのショートカット
 """
 
 import board, digitalio, usb_hid, time, keypad, rotaryio, neopixel,  rainbowio
+from adafruit_debouncer import Debouncer
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keyboard import Keycode
 
@@ -27,23 +28,23 @@ kbd = Keyboard( usb_hid.devices )
 
 
 # 入力(SW)    0 [Y]      1 [x5]     2 [X]       3 [x1]      4 [HOME]
-myPinsIN  = ( board.GP3, board.GP1, board.GP25, board.GP27, board.GP0 )
+myPinsIN  = ( board.GP9, board.GP6, board.GP21, board.GP24, board.GP0 )
 myBtns = keypad.Keys( myPinsIN, value_when_pressed=False, pull=True )	# ボタン化(Keypad使用)
 
 # 出力(LED)   0 [Y]      1 [x5]     2 [X]       3 [x1]      4 [NeoP…]  5 [RotaryEncoder]
-myPinsOUT = ( board.GP4, board.GP2, board.GP26, board.GP28, board.GP18, board.GP16 )
+myPinsOUT = ( board.GP8, board.GP7, board.GP22, board.GP23, board.GP18, board.GP16 )
 myLEDs = []
 for ii, pin in enumerate( myPinsOUT ) :		# enumerate(添字)込みの繰り返し
 	tmp_pin = digitalio.DigitalInOut( pin )	# 端子の指定	
 	tmp_pin.direction = digitalio.Direction.OUTPUT	# 出力
 	myLEDs.append( tmp_pin )						# LED　※Debouncer不要
-	if ii > 2 : myLEDs[ii].value = True		
-XY = 0	# 状態(  軸  ) => 0:X,  1:Y
+	if ii > 1 : myLEDs[ii].value = True
+XY = True	# 状態(  軸  ) => True:X,  Fales:Y
 
 
 # Neopixelの制御
 num_leds = 3		  #( 信号端子  , LEDの数 , 明るさ         )
-led = neopixel.NeoPixel( board.GP17, num_leds, brightness=0.2 )
+led = neopixel.NeoPixel( board.GP17, num_leds, brightness=0.1 )
 
 
 # エンコーダ
@@ -57,54 +58,57 @@ while True:
 
 	# ボタンを押したときのイベント
 	myBtn = myBtns.events.get()
-	if myBtn and myBtn.presed :
-		
+	if myBtn and myBtn.pressed :
+
 		# [X]が押された場合
 		if myBtn.key_number == 2 :
-			XY == 0
+			XY = True
 			myLEDs[2].value = True	# X LED点灯
 			myLEDs[0].value = False	# Y LED消灯
 
 		# [Y]が押された場合
 		elif myBtn.key_number == 0 :
-			XY == 1
+			XY = False
 			myLEDs[2].value = False	# X LED消灯
 			myLEDs[0].value = True	# Y LED点灯
 
-		# [x1]が押された場合
+		# [x1]が押された場1
 		elif myBtn.key_number == 3 :
-			myBtns[3].value = True			# x1 LED点灯
-			myBtns[1].value = False			# x5 LED消灯
-			kbd.send( Keycode.BACKSPACE )	# 文字を消して"1"を入力
-			kbd.send( Keycode.ONE )			# 	※一文字を前提としている！
+			myLEDs[3].value = True	# x1 LED点灯
+			myLEDs[1].value = False	# x5 LED消灯
+			for ii in range( 5 ) :
+				kbd.send( Keycode.BACKSPACE )	# 文字を消去
+				kbd.send( Keycode.DELETE )		# 文字を消去
+			kbd.send( Keycode.ONE )				# １を入力
 
 		# [x5]が押された場合
 		elif myBtn.key_number == 1 :
-			myBtns[3].value = False			# x1 LED消灯
-			myBtns[1].value = True			# x5 LED点灯
-			kbd.send( Keycode.BACKSPACE )	# 文字を消して”5”を入力
-			kbd.send( Keycode.FIVE )		# 	※一文字を前提としている！
+			myLEDs[3].value = False	# x1 LED消灯
+			myLEDs[1].value = True	# x5 LED点灯
+			for ii in range( 5 ) :
+				kbd.send( Keycode.BACKSPACE )	# 文字を消去
+				kbd.send( Keycode.DELETE )		# 文字を消去
+			kbd.send( Keycode.FIVE )			# ５を入力
 
 		# [home]が押された場合
 		elif myBtn.key_number == 4 :
 			kbd.send( Keycode.LEFT_CONTROL, Keycode.H )	# Ctl + H
-
 
 	# ロータリーエンコーダーを回したときのイベント
 	position = encoder.position	#値更新
 	if not( position_last is None ) and ( position != position_last ) :	#非初期値 かつ 値変更
 
 		# 右移動 Ctrl + →
-		if   ( XY == 0 ) and ( (position - position_last) > 0 ) : kbd.send( Keycode.LEFT_CONTROL, Keycode.RIGHT_ARROW )
+		if   ( XY == True )  and ( (position - position_last) > 0 ) : kbd.send( Keycode.LEFT_CONTROL, Keycode.RIGHT_ARROW )
 
 		# 左移動 Ctrl + ←
-		elif ( XY == 0 ) and ( (position - position_last) < 0 ) : kbd.send( Keycode.LEFT_CONTROL, Keycode.LEFT_ARROW )
+		elif ( XY == True )  and ( (position - position_last) < 0 ) : kbd.send( Keycode.LEFT_CONTROL, Keycode.LEFT_ARROW )
 
 		# 上移動 Ctrl + ↑
-		elif ( XY == 1 ) and ( (position - position_last) > 0 ) : kbd.send( Keycode.LEFT_CONTROL, Keycode.UP_ARROW )
+		elif ( XY == False ) and ( (position - position_last) > 0 ) : kbd.send( Keycode.LEFT_CONTROL, Keycode.UP_ARROW )
 	
 		# 下移動 Ctrl + ↓
-		elif ( XY == 1 ) and ( (position - position_last) < 0 ) : kbd.send( Keycode.LEFT_CONTROL, Keycode.DOWN_ARROW )
+		elif ( XY == False ) and ( (position - position_last) < 0 ) : kbd.send( Keycode.LEFT_CONTROL, Keycode.DOWN_ARROW )
 
 	position_last = position	#値保存
 	
