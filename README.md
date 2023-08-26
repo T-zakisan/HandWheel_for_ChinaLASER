@@ -9,6 +9,10 @@
 マイコンの種類によって、ファームウェアやアサインによるコードが異なるが、記録として残しておく。
 
 
+![PXL_20230826_063911550 MP](https://github.com/T-zakisan/HandWheel_for_ChinaLASER/assets/43605763/92c29b83-22fd-4e66-bf86-c619ee27af6b)
+
+
+https://github.com/T-zakisan/HandWheel_for_ChinaLASER/assets/43605763/c768501c-d489-4e9a-84a6-d65c8223c7b7
 
 
 ## [K40 Whispererのショートカット](https://www.scorchworks.com/K40whisperer/k40w_manual.html#keyboard)
